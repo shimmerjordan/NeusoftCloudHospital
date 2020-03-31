@@ -1,0 +1,213 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.neuedu.hospitalbackend.model.dao.RegistrationMapper">
+
+  <resultMap id="BaseResultMap" type="Registration">
+    <result column="id" jdbcType="INTEGER" property="id" />
+    <result column="patient_id" jdbcType="INTEGER" property="patientId" />
+    <result column="appointment_date" jdbcType="DATE" property="appointmentDate" />
+    <result column="time_slot" jdbcType="TINYINT" property="timeSlot"/>
+    <result column="role_id" jdbcType="INTEGER" property="roleId" />
+    <result column="registration_level_id" jdbcType="SMALLINT" property="registrationLevelId" />
+    <result column="department_id" jdbcType="INTEGER" property="departmentId" />
+    <result column="total_fee" jdbcType="DECIMAL" property="totalFee" />
+    <result column="is_normal" jdbcType="BIT" property="isNormal" />
+    <result column="cashier_id" jdbcType="INTEGER" property="cashierId" />
+    <result column="pay_type" jdbcType="TINYINT" property="payType" />
+    <result column="is_buy_case_book" jdbcType="BIT" property="isBuyCaseBook" />
+    <result column="gmt_create" jdbcType="TIMESTAMP" property="gmtCreate" />
+    <result column="gmt_modified" jdbcType="TIMESTAMP" property="gmtModified" />
+    <association property="patientCase" javaType="PatientCase">
+        <id column="registration_id" property="registrationId" />
+        <result column="status" property="status"/>
+    </association>
+    <association property="patient" javaType="Patient">
+      <id column="patient_id" property="id"/>
+      <result column="id_card" jdbcType="CHAR" property="idCard" />
+      <result column="address" jdbcType="VARCHAR" property="address" />
+      <result column="gender" jdbcType="TINYINT" property="gender" />
+      <result column="name" jdbcType="VARCHAR" property="name" />
+      <result column="birthday" jdbcType="DATE" property="birthday" />
+    </association>
+    <association property="transactionLog" javaType="TransactionLog">
+        <id column="transaction_id" property="id"/>
+        <result column="invoice_code" property="invoiceCode"/>
+    </association>
+  </resultMap>
+
+  <insert id="insert" parameterType="Registration" useGeneratedKeys="true" keyProperty="id">
+    insert into registration (id, patient_id, appointment_date, time_slot,
+      role_id, registration_level_id, department_id, 
+      total_fee, is_normal, cashier_id, 
+      pay_type, is_buy_case_book, gmt_create, 
+      gmt_modified)
+    values (#{id,jdbcType=INTEGER}, #{patientId,jdbcType=INTEGER}, #{appointmentDate,jdbcType=DATE}, #{timeSlot,jdbcType=TINYINT},
+      #{roleId,jdbcType=INTEGER}, #{registrationLevelId,jdbcType=SMALLINT}, #{departmentId,jdbcType=INTEGER}, 
+      #{totalFee,jdbcType=DECIMAL}, #{isNormal,jdbcType=BIT}, #{cashierId,jdbcType=INTEGER}, 
+      #{payType,jdbcType=TINYINT}, #{isBuyCaseBook,jdbcType=BIT}, #{gmtCreate,jdbcType=TIMESTAMP}, 
+      #{gmtModified,jdbcType=TIMESTAMP})
+  </insert>
+
+  <insert id="insertSelective" parameterType="Registration" useGeneratedKeys="true" keyProperty="id">
+    insert into registration
+    <trim prefix="(" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        id,
+      </if>
+      <if test="patientId != null">
+        patient_id,
+      </if>
+      <if test="appointmentDate != null">
+        appointment_date,
+      </if>
+        <if test="timeSlot != null">
+            time_slot,
+        </if>
+      <if test="roleId != null">
+        role_id,
+      </if>
+      <if test="registrationLevelId != null">
+        registration_level_id,
+      </if>
+      <if test="departmentId != null">
+        department_id,
+      </if>
+      <if test="totalFee != null">
+        total_fee,
+      </if>
+      <if test="isNormal != null">
+        is_normal,
+      </if>
+      <if test="cashierId != null">
+        cashier_id,
+      </if>
+      <if test="payType != null">
+        pay_type,
+      </if>
+      <if test="isBuyCaseBook != null">
+        is_buy_case_book,
+      </if>
+      <if test="gmtCreate != null">
+        gmt_create,
+      </if>
+      <if test="gmtModified != null">
+        gmt_modified,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides=",">
+      <if test="id != null">
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="patientId != null">
+        #{patientId,jdbcType=INTEGER},
+      </if>
+      <if test="appointmentDate != null">
+        #{appointmentDate,jdbcType=DATE},
+      </if>
+        <if test="timeSlot != null">
+            #{timeSlot,jdbcType=TINYINT},
+        </if>
+      <if test="roleId != null">
+        #{roleId,jdbcType=INTEGER},
+      </if>
+      <if test="registrationLevelId != null">
+        #{registrationLevelId,jdbcType=SMALLINT},
+      </if>
+      <if test="departmentId != null">
+        #{departmentId,jdbcType=INTEGER},
+      </if>
+      <if test="totalFee != null">
+        #{totalFee,jdbcType=DECIMAL},
+      </if>
+      <if test="isNormal != null">
+        #{isNormal,jdbcType=BIT},
+      </if>
+      <if test="cashierId != null">
+        #{cashierId,jdbcType=INTEGER},
+      </if>
+      <if test="payType != null">
+        #{payType,jdbcType=TINYINT},
+      </if>
+      <if test="isBuyCaseBook != null">
+        #{isBuyCaseBook,jdbcType=BIT},
+      </if>
+      <if test="gmtCreate != null">
+        #{gmtCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gmtModified != null">
+        #{gmtModified,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+
+  <select id="getNextId" resultType="integer">
+    select MAX(id) + 1 from registration
+    <!--select id +1 from  registration order by id desc limit 1-->
+  </select>
+
+  <update id="updateSelective" parameterType="Registration">
+    update registration
+    <trim prefix="set" suffixOverrides=",">
+      <if test="patientId != null"> patient_id = #{patientId}, </if>
+      <if test="appointmentDate != null"> appointment_date = #{appointmentDate}, </if>
+        <if test="timeSlot != null"> time_slot = #{timeSlot}, </if>
+      <if test="roleId != null"> role_id = #{roleId}, </if>
+      <if test="registrationLevelId != null"> registration_level_id = #{registrationLevelId}, </if>
+      <if test="departmentId != null"> department_id = #{departmentId}, </if>
+      <if test="totalFee != null"> total_fee = #{totalFee}, </if>
+      <if test="isNormal != null"> is_normal = #{isNormal}, </if>
+      <if test="cashierId != null"> cashier_id = #{cashierId}, </if>
+      <if test="payType != null"> pay_type = #{payType}, </if>
+      <if test="isBuyCaseBook != null"> is_buy_case_book = #{isBuyCaseBook}, </if>
+    </trim>
+    where id = #{id}
+  </update>
+
+  <select id="getRegistrationInfo" resultMap="BaseResultMap">
+        select r.*, pc.status, p.address, p.name, p.gender,p.id_card, p.birthday
+        from registration r, patient p, patient_case pc
+        where r.id = #{registrationId} and pc.registration_id = #{registrationId} and r.patient_id = p.id
+  </select>
+  
+  <update id="updateStatusById" parameterType="Registration">
+    update registration
+    set is_normal = false
+    where id = #{registrationId}
+  </update>
+
+  <select id="listAllNormalRegistrationsInfo" resultMap="BaseResultMap">
+    select r.*, t.invoice_code, p.address, p.name, p.gender,p.id_card, p.birthday, pc.status
+    from registration r, patient p, transaction_log t, patient_case pc
+    where r.patient_id = p.id and r.id = pc.registration_id and r.id = t.registration_id
+    and  r.is_normal = 1  and t.type = "挂号费"
+  </select>
+
+  <select id="listAllRefundedRegistrationInfo" resultMap="BaseResultMap">
+    select r.*, t.invoice_code, p.address, p.name, p.gender,p.id_card, p.birthday
+    from registration r, patient p, transaction_log t
+    where r.patient_id = p.id and t.registration_id = r.id
+    and r.is_normal = 0 and t.type = "挂号费" and t.total_money > 0
+  </select>
+
+  <resultMap id="JoinMap" type="HashMap">
+    <result column="id" jdbcType="INTEGER" property="registrationId" />
+    <result column="patient_id" jdbcType="INTEGER" property="patientId" />
+    <result column="appointment_date" jdbcType="DATE" property="appointmentDate" />
+    <result column="time_slot" jdbcType="TINYINT" property="timeSlot"/>
+    <result column="role_id" jdbcType="INTEGER" property="roleId" />
+    <result column="registration_level_id" jdbcType="SMALLINT" property="registrationLevelId" />
+    <result column="department_id" jdbcType="INTEGER" property="departmentId" />
+    <result column="total_fee" jdbcType="DECIMAL" property="totalFee" />
+    <result column="is_normal" jdbcType="BIT" property="isNormal" />
+    <result column="cashier_id" jdbcType="INTEGER" property="cashierId" />
+    <result column="pay_type" jdbcType="TINYINT" property="payType" />
+    <result column="name" jdbcType="VARCHAR" property="departmentName" />
+  </resultMap>
+
+  <select id="listRegistrationsByPatientId" resultMap="JoinMap" parameterType="Integer">
+    select * from registration
+    left join department on registration.department_id = department.id
+    where registration.patient_id = #{patientId}
+  </select>
+
+</mapper>

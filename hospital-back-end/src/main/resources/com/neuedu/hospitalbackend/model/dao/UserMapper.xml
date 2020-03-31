@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.neuedu.hospitalbackend.model.dao.UserMapper">
+    <resultMap id="UserAndRoleResultMap" type="HashMap">
+        <id column="id" property="userId"/>
+        <result column="name" property="name"/>
+        <result column="avatar" property="avatar"/>
+        <result column="gmt_create" property="gmtCreate"/>
+        <collection property="roles"  javaType="java.util.List" ofType="HashMap">
+            <id column="r_id" property="roleId"/>
+            <result column="position_id" property="positionId"/>
+            <result column="position_name" property="positionName"/>
+            <result column="department_id" property="departmentId"/>
+            <result column="department_name" property="departmentName"/>
+            <result column="title_id" property="titleId"/>
+            <result column="title_name" property="titleName"/>
+        </collection>
+    </resultMap>
+
+    <resultMap id="BaseResultMap" type="User">
+        <id column="id" property="id"/>
+        <result column="name" property="name"/>
+        <result column="avatar" property="avatar"/>
+    </resultMap>
+
+    <select id="userAuthentication" resultType="com.neuedu.hospitalbackend.model.po.User">
+        select * from user where id = #{id} and password = #{password}
+    </select>
+
+    <select id="listAllUsersAndRoles" resultMap="UserAndRoleResultMap">
+        select u.id, u.name, u.gmt_create, r.id as r_id, r.position_id, r.position_name,
+                r.department_id, r.department_name, r.title_id, r.title_name
+        from user u, role r
+        where u.id = r.user_id
+    </select>
+
+    <select id="get" resultMap="BaseResultMap" parameterType="Integer">
+    select id, name, avatar, gmt_create, gmt_modified from user where id = #{id}
+  </select>
+
+    <insert id="insert" parameterType="com.neuedu.hospitalbackend.model.po.User" >
+    insert into user (name, password, avatar)
+    values (#{name}, #{password}, #{avatar})
+  </insert>
+
+    <update id="update" parameterType="com.neuedu.hospitalbackend.model.po.User">
+        update user set name = #{name}, password = #{password}, avatar = #{avatar} where id = #{id}
+    </update>
+
+    <delete id="delete" parameterType="Integer">
+        delete from user where id = #{id}
+    </delete>
+
+    <update id="setAvatar">
+        update user set avatar=#{avatar} where id=#{id}
+    </update>
+
+    <update id="setPassword">
+        update user set password=#{newPassword} where id=#{id}
+    </update>
+
+    <select id="getUserInfo" parameterType="Integer" resultType="com.neuedu.hospitalbackend.model.po.User">
+        select * from user where id = #{id}
+    </select>
+
+</mapper>

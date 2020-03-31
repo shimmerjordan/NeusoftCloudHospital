@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.neuedu.hospitalbackend.model.dao.RegistrationLevelMapper">
+
+    <resultMap id="MatchMap" type="RegistrationLevel">
+        <id column="id" property="id"/>
+        <result column="code" property="code"/>
+        <result column="name" property="name"/>
+        <result column="quota" property="quota"/>
+        <result column="cost" property="cost"/>
+    </resultMap>
+
+    <select id="get" resultMap="MatchMap" parameterType="Short">
+     select id, code, name, quota, cost from registration_level where id = #{id}
+    </select>
+
+    <select id="list" resultMap="MatchMap">
+        select id, code, name, quota, cost from registration_level
+    </select>
+
+    <insert id="insert" parameterType="RegistrationLevel" >
+    insert into registration_level (code, name, quota, cost)
+    values (#{code}, #{name}, #{quota}, #{cost})
+    </insert>
+
+    <update id="update" parameterType="RegistrationLevel">
+        update registration_level set code = #{code}, name = #{name}, quota = #{quota}, cost = #{cost} where id = #{id}
+    </update>
+
+    <delete id="delete" parameterType="Short">
+        delete from registration_level where id = #{id}
+    </delete>
+
+    <select id="getRegistrationLevelCostById" resultType="decimal">
+        select cost from registration_level where id = #{id}
+    </select>
+
+</mapper>

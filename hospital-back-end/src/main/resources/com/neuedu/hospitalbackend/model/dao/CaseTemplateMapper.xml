@@ -1,0 +1,193 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.neuedu.hospitalbackend.model.dao.CaseTemplateMapper" >
+  <resultMap id="BaseResultMap" type="com.neuedu.hospitalbackend.model.po.CaseTemplate" >
+    <result column="id" property="id" jdbcType="INTEGER" />
+    <result column="role_id" property="roleId" jdbcType="INTEGER" />
+    <result column="department_id" property="departmentId" jdbcType="INTEGER" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="scope" property="scope" jdbcType="TINYINT" />
+    <result column="narrate" property="narrate" jdbcType="VARCHAR" />
+    <result column="cur_disease" property="curDisease" jdbcType="VARCHAR" />
+    <result column="physical_condition" property="physicalCondition" jdbcType="VARCHAR" />
+    <result column="cur_treat_condition" property="curTreatCondition" jdbcType="VARCHAR" />
+    <result column="past_disease" property="pastDisease" jdbcType="VARCHAR" />
+    <result column="allergy" property="allergy" jdbcType="VARCHAR" />
+    <result column="assist_diagnose" property="assistDiagnose" jdbcType="VARCHAR" />
+    <result column="gmt_create" property="gmtCreate" jdbcType="TIMESTAMP" />
+    <result column="gmt_modified" property="gmtModified" jdbcType="TIMESTAMP" />
+  </resultMap>
+  <resultMap id="caseTemplateInfo" type="HashMap" >
+    <result column="role_id" property="roleId" jdbcType="INTEGER" />
+    <result column="name" property="name" jdbcType="VARCHAR" />
+    <result column="scope" property="scope" jdbcType="TINYINT" />
+    <result column="narrate" property="narrate" jdbcType="VARCHAR" />
+    <result column="cur_disease" property="curDisease" jdbcType="VARCHAR" />
+    <result column="physical_condition" property="physicalCondition" jdbcType="VARCHAR" />
+    <result column="cur_treat_condition" property="curTreatCondition" jdbcType="VARCHAR" />
+    <result column="past_disease" property="pastDisease" jdbcType="VARCHAR" />
+    <result column="allergy" property="allergy" jdbcType="VARCHAR" />
+    <result column="assist_diagnose" property="assistDiagnose" jdbcType="VARCHAR" />
+  </resultMap>
+  <insert id="insert" parameterType="com.neuedu.hospitalbackend.model.po.CaseTemplate" >
+    insert into case_template ( role_id, department_id,
+      name, scope, narrate, 
+      cur_disease, physical_condition,
+      cur_treat_condition, past_disease,
+      allergy, assist_diagnose)
+    values (#{roleId,jdbcType=INTEGER}, #{departmentId,jdbcType=INTEGER},
+      #{name,jdbcType=VARCHAR}, #{scope,jdbcType=TINYINT}, #{narrate,jdbcType=VARCHAR}, 
+      #{curDisease,jdbcType=VARCHAR}, #{physicalCondition,jdbcType=VARCHAR},
+      #{curTreatCondition,jdbcType=VARCHAR}, #{pastDisease,jdbcType=VARCHAR},
+      #{allergy,jdbcType=VARCHAR}, #{assistDiagnose,jdbcType=VARCHAR})
+  </insert>
+  <insert id="insertSelective" parameterType="com.neuedu.hospitalbackend.model.po.CaseTemplate" >
+    insert into case_template
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="roleId != null" >
+        role_id,
+      </if>
+      <if test="departmentId != null" >
+        department_id,
+      </if>
+      <if test="name != null" >
+        name,
+      </if>
+      <if test="scope != null" >
+        scope,
+      </if>
+      <if test="narrate != null" >
+        narrate,
+      </if>
+      <if test="curDisease != null" >
+        cur_disease,
+      </if>
+      <if test="physicalCondition != null" >
+        physical_condition,
+      </if>
+      <if test="curTreatCondition != null" >
+        cur_treat_condition,
+      </if>
+      <if test="pastDisease != null" >
+        past_disease,
+      </if>
+      <if test="allergy != null" >
+        allergy,
+      </if>
+      <if test="assistDiagnose != null" >
+        assist_diagnose,
+      </if>
+      <if test="gmtCreate != null" >
+        gmt_create,
+      </if>
+      <if test="gmtModified != null" >
+        gmt_modified,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=INTEGER},
+      </if>
+      <if test="roleId != null" >
+        #{roleId,jdbcType=INTEGER},
+      </if>
+      <if test="departmentId != null" >
+        #{departmentId,jdbcType=INTEGER},
+      </if>
+      <if test="name != null" >
+        #{name,jdbcType=VARCHAR},
+      </if>
+      <if test="scope != null" >
+        #{scope,jdbcType=TINYINT},
+      </if>
+      <if test="narrate != null" >
+        #{narrate,jdbcType=VARCHAR},
+      </if>
+      <if test="curDisease != null" >
+        #{curDisease,jdbcType=VARCHAR},
+      </if>
+      <if test="physicalCondition != null" >
+        #{physicalCondition,jdbcType=VARCHAR},
+      </if>
+      <if test="curTreatCondition != null" >
+        #{curTreatCondition,jdbcType=VARCHAR},
+      </if>
+      <if test="pastDisease != null" >
+        #{pastDisease,jdbcType=VARCHAR},
+      </if>
+      <if test="allergy != null" >
+        #{allergy,jdbcType=VARCHAR},
+      </if>
+      <if test="assistDiagnose != null" >
+        #{assistDiagnose,jdbcType=VARCHAR},
+      </if>
+      <if test="gmtCreate != null" >
+        #{gmtCreate,jdbcType=TIMESTAMP},
+      </if>
+      <if test="gmtModified != null" >
+        #{gmtModified,jdbcType=TIMESTAMP},
+      </if>
+    </trim>
+  </insert>
+
+  <select id="getPatientCaseTemplateByRoleIdAndName" resultMap = "BaseResultMap">
+      select *
+      from case_template
+      where role_id = #{roleId} and name = #{name}
+  </select>
+
+  <select id="getNameById" resultType="String">
+    select name
+    from case_template
+    where id = #{id}
+  </select>
+
+  <update id="update" >
+    update case_template
+    set name = #{newName}, scope = #{scope},
+      narrate = #{narrate}, cur_disease = #{curDisease},
+      physical_condition = #{physicalCondition},
+      cur_treat_condition = #{curTreatCondition},
+      past_disease = #{pastDisease}, allergy = #{allergy},
+      assist_diagnose = #{assistDiagnose}
+    where role_id = #{roleId} and name = #{name}
+  </update>
+
+  <select id="listMyCaseTemplates" resultMap="caseTemplateInfo">
+    select role_id, name, scope, name as newName, narrate, cur_disease, cur_treat_condition, past_disease,
+            allergy, physical_condition, assist_diagnose
+    from case_template
+    where role_id = #{roleId}
+  </select>
+
+  <select id="listDepartmentCaseTemplates" resultMap="caseTemplateInfo">
+    select role_id, name, scope, name as newName, narrate, cur_disease, cur_treat_condition, past_disease,
+            allergy, physical_condition, assist_diagnose
+    from case_template
+    where department_id = #{departmentId} and scope = 2
+  </select>
+
+  <select id="listHospitalCaseTemplates" resultMap="caseTemplateInfo">
+    select role_id, name, scope, name as newName, narrate, cur_disease, cur_treat_condition, past_disease,
+            allergy, physical_condition, assist_diagnose
+    from case_template
+    where scope = 3
+  </select>
+
+  <select id="getRoleIdById" resultType="Integer">
+    select role_id
+    from case_template
+    where id = #{id}
+  </select>
+
+  <delete id="deleteById">
+    delete
+    from case_template
+    where id = #{id}
+  </delete>
+
+
+</mapper>

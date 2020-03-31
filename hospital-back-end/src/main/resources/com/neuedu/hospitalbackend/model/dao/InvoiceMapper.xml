@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.neuedu.hospitalbackend.model.dao.InvoiceMapper" >
+
+  <resultMap id="BaseResultMap" type="Invoice" >
+    <result column="id" property="id" jdbcType="CHAR" />
+    <result column="status" property="status" jdbcType="TINYINT" />
+    <result column="gmt_create" property="gmtCreate" jdbcType="TIMESTAMP" />
+    <result column="gmt_modified" property="gmtModified" jdbcType="TIMESTAMP" />
+  </resultMap>
+
+  <insert id="insert">
+    insert into invoice (id)
+    values (#{id,jdbcType=CHAR})
+  </insert>
+
+  <insert id="insertSelective" parameterType="Invoice" >
+    insert into invoice
+    <trim prefix="(" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        id,
+      </if>
+      <if test="status != null" >
+        status,
+      </if>
+    </trim>
+    <trim prefix="values (" suffix=")" suffixOverrides="," >
+      <if test="id != null" >
+        #{id,jdbcType=CHAR},
+      </if>
+      <if test="status != null" >
+        #{status,jdbcType=TINYINT},
+      </if>
+    </trim>
+  </insert>
+
+  <select id="getInvoiceInfo" resultType="HashMap">
+    select count(*) as count, status from invoice group by status
+  </select>
+
+  <select id="list" resultType="Invoice">
+    select * from invoice
+  </select>
+
+  <select id="getAvailableInvoiceCode" resultType="string">
+      select min(id) from invoice
+      <where>
+        <if test="dateStr != null">
+          and date_format(gmt_create,'%Y-%m-%d') = #{dateStr}
+        </if>
+        and status = 1
+      </where>
+  </select>
+
+  <update id="updateInvoiceStatusById" parameterType="Invoice">
+    update invoice set status = #{status} where id = #{id}
+  </update>
+</mapper>

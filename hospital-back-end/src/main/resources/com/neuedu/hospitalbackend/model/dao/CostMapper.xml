@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="com.neuedu.hospitalbackend.model.dao.CostMapper" >
+    <resultMap id="BaseResultMap" type="com.neuedu.hospitalbackend.model.po.Cost" >
+        <result column="id" property="id" jdbcType="INTEGER" />
+        <result column="code" property="code" jdbcType="VARCHAR" />
+        <result column="name" property="name" jdbcType="VARCHAR" />
+    </resultMap>
+
+    <insert id="insertSelective" parameterType="com.neuedu.hospitalbackend.model.po.Cost" >
+        insert into cost
+        <trim prefix="(" suffix=")" suffixOverrides="," >
+            <if test="id != null" >
+                id,
+            </if>
+            <if test="code != null" >
+                code,
+            </if>
+            <if test="name != null" >
+                name,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides="," >
+            <if test="id != null" >
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="code != null" >
+                #{code,jdbcType=VARCHAR},
+            </if>
+            <if test="name != null" >
+                #{name,jdbcType=VARCHAR},
+            </if>
+        </trim>
+    </insert>
+
+    <select id="get" resultMap="BaseResultMap" parameterType="Integer">
+      select id, code, name from cost where id = #{id}
+    </select>
+
+    <select id="list" resultMap="BaseResultMap">
+      select id, code, name from cost
+    </select>
+
+    <select id="getById" resultMap="BaseResultMap">
+       select id, code, name
+       from cost
+       where id = #{id}
+    </select>
+
+    <update id="update" parameterType="Cost">
+        update cost set code = #{code}, name = #{name}
+        where id = #{id}
+    </update>
+
+    <delete id="delete" parameterType="integer">
+        delete from cost where id = #{id}
+    </delete>
+
+</mapper>

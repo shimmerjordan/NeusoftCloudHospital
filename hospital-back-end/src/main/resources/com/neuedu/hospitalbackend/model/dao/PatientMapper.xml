@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.neuedu.hospitalbackend.model.dao.PatientMapper">
+
+    <resultMap id="BaseResultMap" type="Patient">
+        <result column="id" jdbcType="INTEGER" property="id" />
+        <result column="id_card" jdbcType="CHAR" property="idCard" />
+        <result column="address" jdbcType="VARCHAR" property="address" />
+        <result column="gender" jdbcType="TINYINT" property="gender" />
+        <result column="name" jdbcType="VARCHAR" property="name" />
+        <result column="birthday" jdbcType="DATE" property="birthday" />
+        <result column="gmt_create" jdbcType="TIMESTAMP" property="gmtCreate" />
+        <result column="gmt_modified" jdbcType="TIMESTAMP" property="gmtModified" />
+        <!--<collection property="registrations" ofType="Registration">-->
+            <!--<id property="registrationId" column="registration_id"/>-->
+        <!--</collection>-->
+    </resultMap>
+
+    <insert id="insert" parameterType="Patient" useGeneratedKeys="true" keyProperty="id">
+        insert into patient (id, id_card, address,
+          gender, name, birthday,
+          gmt_create, gmt_modified)
+        values (#{id,jdbcType=INTEGER}, #{idCard,jdbcType=CHAR}, #{address,jdbcType=VARCHAR},
+          #{gender,jdbcType=TINYINT}, #{name,jdbcType=VARCHAR}, #{birthday,jdbcType=DATE},
+          #{gmtCreate,jdbcType=TIMESTAMP}, #{gmtModified,jdbcType=TIMESTAMP})
+    </insert>
+
+    <insert id="insertSelective" parameterType="Patient" useGeneratedKeys="true" keyProperty="id">
+        insert into patient
+        <trim prefix="(" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                id,
+            </if>
+            <if test="idCard != null">
+                id_card,
+            </if>
+            <if test="address != null">
+                address,
+            </if>
+            <if test="gender != null">
+                gender,
+            </if>
+            <if test="name != null">
+                name,
+            </if>
+            <if test="birthday != null">
+                birthday,
+            </if>
+            <if test="gmtCreate != null">
+                gmt_create,
+            </if>
+            <if test="gmtModified != null">
+                gmt_modified,
+            </if>
+        </trim>
+        <trim prefix="values (" suffix=")" suffixOverrides=",">
+            <if test="id != null">
+                #{id,jdbcType=INTEGER},
+            </if>
+            <if test="idCard != null">
+                #{idCard,jdbcType=CHAR},
+            </if>
+            <if test="address != null">
+                #{address,jdbcType=VARCHAR},
+            </if>
+            <if test="gender != null">
+                #{gender,jdbcType=TINYINT},
+            </if>
+            <if test="name != null">
+                #{name,jdbcType=VARCHAR},
+            </if>
+            <if test="birthday != null">
+                #{birthday,jdbcType=DATE},
+            </if>
+            <if test="gmtCreate != null">
+                #{gmtCreate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="gmtModified != null">
+                #{gmtModified,jdbcType=TIMESTAMP},
+            </if>
+        </trim>
+    </insert>
+
+    <select id="getPatientInfoById" resultType="Patient">
+        select * from patient where id = #{id}
+    </select>
+
+    <select id="getPatientByIdCard" resultType="integer">
+        select id from patient where id_card = #{idCard}
+    </select>
+
+     <select id="getPatientByRegistrationId" resultMap="BaseResultMap">
+        select id_card, address, name, gender, birthday from patient p, registration r
+        where r.id = #{registrationId} and p.id = r.patient_id
+    </select>
+
+    <update id="updatePatientInfo" parameterType="Patient">
+        update patient
+        <trim prefix="set" suffixOverrides=",">
+            <if test="address != null"> address = #{address}, </if>
+            <if test="gender != null"> gender = #{gender}, </if>
+            <if test="name != null"> name = #{name}, </if>
+            <if test="birthday != null"> birthday = #{birthday}, </if>
+        </trim>
+        where id = #{id}
+    </update>
+
+
+</mapper>
